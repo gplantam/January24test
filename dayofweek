@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Emulation Response</title>
+</head>
+<body>
+
+<script>
+    // Function to speak a given text using SpeechSynthesis API
+    function speak(text) {
+        var synth = window.speechSynthesis;
+        var utterance = new SpeechSynthesisUtterance(text);
+
+        // Filter voices based on attributes (female)
+        var voices = synth.getVoices();
+        var filteredVoices = voices.filter(function(voice) {
+            return voice.lang.startsWith('en') && voice.gender === 'female';
+        });
+
+        // Use the first available filtered voice or default to the system's default voice
+        utterance.voice = filteredVoices[0] || synth.getVoices()[0];
+
+        // Optional: Set pitch and rate
+        // utterance.pitch = 1;
+        // utterance.rate = 1;
+
+        // Speak the text
+        synth.speak(utterance);
+    }
+
+    // Function to ask for the day and speak the response
+    function askAndSpeak() {
+        // Prompt to get user input
+        var userInput = prompt("What day of the week is it?");
+        var currentDay = userInput.toLowerCase();
+
+        // Check the input and respond
+        if (currentDay === "monday") {
+            var responseText = "I hate that day";
+            alert(responseText); // Display the response in an alert box
+            speak(responseText); // Speak the response
+        } else {
+            var responseText = "At least it's not Monday";
+            alert(responseText); // Display the response in an alert box
+            speak(responseText); // Speak the response
+        }
+    }
+
+    // Wait for voices to be loaded before calling the function
+    window.speechSynthesis.onvoiceschanged = function() {
+        askAndSpeak();
+    };
+</script>
+
+</body>
+</html>
